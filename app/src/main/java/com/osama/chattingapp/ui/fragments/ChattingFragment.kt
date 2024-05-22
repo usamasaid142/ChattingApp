@@ -48,14 +48,15 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
         binding.layoutSend.setOnClickListener {
          val chatMassege=ChatMassege(Constants.KEy_SenderId,"",binding.etMessage.text.toString())
            viewModel.setChatMessage(chatMassege)
+            binding.etMessage.setText("")
         }
     }
     private fun setUpRecyclerViewChat() {
         chatMessageAdapter=ChatMessageAdapter()
         binding.rvChat.apply {
             adapter = chatMessageAdapter
-            chatMessageAdapter.submitList(chatList)
             chatMessageAdapter.notifyDataSetChanged()
+
         }
     }
 
@@ -77,6 +78,11 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
         viewModel.chatMessageResponse.observe(viewLifecycleOwner, Observer {
             chatList.add(it)
             chatMessageAdapter.submitList(chatList)
+            chatMessageAdapter.notifyItemRangeInserted(
+                chatList.size,
+                chatList.size
+            )
+            binding.rvChat.smoothScrollToPosition(chatList.size - 1)
         })
     }
 
