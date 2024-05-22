@@ -9,12 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.osama.chattingapp.databinding.ItemContainerRecivedMesageBinding
 import com.osama.chattingapp.databinding.ItemContainerSentMessageBinding
 import com.osama.chattingapp.data.local.ChatMassege
+import com.osama.chattingapp.utils.Constants
 import com.osama.chattingapp.utils.Constants.viewTypeReceived
 import com.osama.chattingapp.utils.Constants.viewTypeSent
 
-class ChatMessageAdapter(val senderId:String):ListAdapter<ChatMassege,RecyclerView.ViewHolder>(DiffCallback()) {
-
-
+class ChatMessageAdapter():ListAdapter<ChatMassege,RecyclerView.ViewHolder>(DiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -32,20 +31,18 @@ class ChatMessageAdapter(val senderId:String):ListAdapter<ChatMassege,RecyclerVi
         if (getItemViewType(position)==viewTypeSent){
             (holder as ViewHolderSent).binding.apply {
                 textmessage.text=chat.message
-                tvDatetime.text=chat.dateTime
             }
 
         }else{
             (holder as ViewHolderReceived).binding.apply {
                 textmessage.text=chat.message
-                tvDatetime.text=chat.dateTime
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         val chat=getItem(position)
-        return if (chat.senderId == senderId){
+        return if (chat.senderId == Constants.KEy_SenderId){
             viewTypeSent
         }else{
             viewTypeReceived
