@@ -5,5 +5,6 @@ object Constants {
     const val viewTypeReceived=2
     const val KEy_SenderId="SenderId"
     const val KEy_ReceiverId="ReceiverId"
+    const val Chat_Db="ChatDatabase"
 
 }

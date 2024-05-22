@@ -72,5 +72,9 @@ dependencies {
     // hilt
     implementation ("com.google.dagger:hilt-android:2.44.2")
     kapt ("com.google.dagger:hilt-compiler:2.44.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    //room
+    implementation("androidx.room:room-runtime:2.4.3")
+    annotationProcessor("androidx.room:room-compiler:2.4.3")
 
 }

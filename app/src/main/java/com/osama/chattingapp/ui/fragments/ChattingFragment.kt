@@ -70,7 +70,7 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
     }
     override fun onMessageReceived(message: String) {
        runBlocking {
-           val chatMassege=ChatMassege("",Constants.KEy_SenderId,"ok")
+           val chatMassege=ChatMassege("",Constants.KEy_ReceiverId,message)
            viewModel.setChatMessage(chatMassege)
            }
        }
