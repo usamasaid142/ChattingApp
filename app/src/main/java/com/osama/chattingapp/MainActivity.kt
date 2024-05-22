@@ -3,29 +3,30 @@ package com.osama.chattingapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import com.osama.chattingapp.databinding.ActivityMainBinding
 import com.osama.chattingapp.websocket.WebSocketMessageListner
 import com.osama.chattingapp.websocket.WebSocketServcies
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.OkHttpClient
 import okhttp3.Request
-
-class MainActivity : AppCompatActivity(),WebSocketMessageListner {
+import okhttp3.WebSocket
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setUpOkhttpClient()
+        binding= ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setupNavigationBottom()
     }
 
-    private fun setUpOkhttpClient(){
-        val url="ws://localhost:3000"
-        val client=OkHttpClient()
-        val request=Request.Builder().url(url).build()
-        val wsListner=WebSocketServcies(this)
-        client.newWebSocket(request,wsListner)
-    }
+    private fun setupNavigationBottom() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        navController = navHostFragment.navController
 
-    override fun onMessageReceived(message: String) {
-       runOnUiThread{
-           Toast.makeText(this,message,Toast.LENGTH_LONG).show()
-       }
     }
 }

@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id ("androidx.navigation.safeargs")
+    id ("kotlin-kapt")
+    id ("com.google.dagger.hilt.android")
 }
 
 android {
@@ -30,6 +33,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -45,5 +52,25 @@ dependencies {
     // define any required OkHttp artifacts without version
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
+    // sizes
+    implementation ("com.intuit.sdp:sdp-android:1.1.0")
+    implementation ("com.intuit.ssp:ssp-android:1.1.0")
+    // navigation components
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
+    // view model dependency
+    // ViewModel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    // LiveData
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+    // Saved state module for ViewModel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1")
+    // optional - helpers for implementing LifecycleOwner in a Service
+    implementation ("androidx.lifecycle:lifecycle-service:2.5.1")
+    kapt ("androidx.lifecycle:lifecycle-compiler:2.5.1")
+
+    // hilt
+    implementation ("com.google.dagger:hilt-android:2.44.2")
+    kapt ("com.google.dagger:hilt-compiler:2.44.2")
 
 }
