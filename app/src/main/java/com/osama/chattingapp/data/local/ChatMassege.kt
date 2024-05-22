@@ -6,7 +6,7 @@ import java.util.Date
 @Entity(tableName = "chat_table")
 data class ChatMassege(
     @PrimaryKey(autoGenerate = true)
-    val id:Int?=0,
+    val id:Int?,
     val senderId:String,
     val receiverId:String,
     val message:String,

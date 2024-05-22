@@ -15,6 +15,7 @@ import com.osama.chattingapp.data.local.ChatMassege
 import com.osama.chattingapp.databinding.ChattingfragmentBinding
 import com.osama.chattingapp.utils.Constants
 import com.osama.chattingapp.viewmodels.ChatViewModels
+import com.osama.chattingapp.viewmodels.ChatViewmodel
 import com.osama.chattingapp.websocket.WebSocketMessageListner
 import com.osama.chattingapp.websocket.WebSocketServcies
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,8 +27,10 @@ import okhttp3.Request
 class ChattingFragment : Fragment(), WebSocketMessageListner {
     private lateinit var binding: ChattingfragmentBinding
     private val viewModel: ChatViewModels by viewModels()
+    private val chatViewModel: ChatViewmodel by viewModels()
     private val chatList= mutableListOf<ChatMassege>()
     private lateinit var chatMessageAdapter: ChatMessageAdapter
+    private var id=0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,19 +39,26 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        getAllChatting()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerViewChat()
         setUpOkhttpClient()
         initButton()
         getChatData()
+
     }
 
     private fun initButton(){
         binding.layoutSend.setOnClickListener {
-         val chatMassege=ChatMassege(senderId = Constants.KEy_SenderId, receiverId = "", message = binding.etMessage.text.toString())
+            id++
+         val chatMassege=ChatMassege(id,senderId = Constants.KEy_SenderId, receiverId = "", message = binding.etMessage.text.toString())
            viewModel.setChatMessage(chatMassege)
-
+           chatViewModel.insertChattingMessage(chatMassege)
             binding.etMessage.setText("")
         }
     }
@@ -71,7 +81,8 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
     }
     override fun onMessageReceived(message: String) {
        runBlocking {
-           val chatMassege=ChatMassege(senderId = "", receiverId = Constants.KEy_ReceiverId, message = message)
+           val chatMassege=ChatMassege(id,senderId = "", receiverId = Constants.KEy_ReceiverId, message = message)
+           chatViewModel.insertChattingMessage(chatMassege)
            viewModel.setChatMessage(chatMassege)
            }
        }
@@ -84,6 +95,13 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
                 chatList.size
             )
             binding.rvChat.smoothScrollToPosition(chatList.size - 1)
+        })
+    }
+
+    private fun getAllChatting() {
+        chatViewModel.allChatting.observe(viewLifecycleOwner, Observer {
+            chatMessageAdapter.submitList(it)
+            chatMessageAdapter.notifyDataSetChanged()
         })
     }
 

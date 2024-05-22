@@ -1,15 +1,12 @@
 package com.osama.chattingapp.data.local
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface ChatDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertChattingMessage(chatMassege: ChatMassege)
     @Delete
     suspend fun deleteChattingMessage(chatMassege: ChatMassege)
