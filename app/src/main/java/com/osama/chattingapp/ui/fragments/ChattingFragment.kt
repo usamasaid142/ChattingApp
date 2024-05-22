@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.osama.chattingapp.adapter.ChatMessageAdapter
+import com.osama.chattingapp.ui.adapter.ChatMessageAdapter
 import com.osama.chattingapp.data.local.ChatMassege
 import com.osama.chattingapp.databinding.ChattingfragmentBinding
 import com.osama.chattingapp.utils.Constants
@@ -46,13 +46,14 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
 
     private fun initButton(){
         binding.layoutSend.setOnClickListener {
-         val chatMassege=ChatMassege(Constants.KEy_SenderId,"",binding.etMessage.text.toString())
+         val chatMassege=ChatMassege(senderId = Constants.KEy_SenderId, receiverId = "", message = binding.etMessage.text.toString())
            viewModel.setChatMessage(chatMassege)
+
             binding.etMessage.setText("")
         }
     }
     private fun setUpRecyclerViewChat() {
-        chatMessageAdapter=ChatMessageAdapter()
+        chatMessageAdapter= ChatMessageAdapter()
         binding.rvChat.apply {
             adapter = chatMessageAdapter
             chatMessageAdapter.notifyDataSetChanged()
@@ -70,7 +71,7 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
     }
     override fun onMessageReceived(message: String) {
        runBlocking {
-           val chatMassege=ChatMassege("",Constants.KEy_ReceiverId,message)
+           val chatMassege=ChatMassege(senderId = "", receiverId = Constants.KEy_ReceiverId, message = message)
            viewModel.setChatMessage(chatMassege)
            }
        }

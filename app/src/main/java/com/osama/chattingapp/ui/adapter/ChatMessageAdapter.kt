@@ -1,4 +1,4 @@
-package com.osama.chattingapp.adapter
+package com.osama.chattingapp.ui.adapter
 
 
 import android.view.LayoutInflater
