@@ -10,6 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.osama.chattingapp.ui.adapter.ChatMessageAdapter
 import com.osama.chattingapp.data.local.ChatMassege
 import com.osama.chattingapp.databinding.ChattingfragmentBinding
@@ -50,7 +53,7 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
         setUpOkhttpClient()
         initButton()
         getChatData()
-
+        deleteChatItem(view)
     }
 
     private fun initButton(){
@@ -58,7 +61,7 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
             id++
          val chatMassege=ChatMassege(id,senderId = Constants.KEy_SenderId, receiverId = "", message = binding.etMessage.text.toString())
            viewModel.setChatMessage(chatMassege)
-           chatViewModel.insertChattingMessage(chatMassege)
+            chatViewModel.insertChattingMessage(chatMassege)
             binding.etMessage.setText("")
         }
     }
@@ -66,6 +69,7 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
         chatMessageAdapter= ChatMessageAdapter()
         binding.rvChat.apply {
             adapter = chatMessageAdapter
+            this.itemAnimator=null
             chatMessageAdapter.notifyDataSetChanged()
 
         }
@@ -94,15 +98,52 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
                 chatList.size,
                 chatList.size
             )
-            binding.rvChat.smoothScrollToPosition(chatList.size - 1)
+           binding.rvChat.smoothScrollToPosition(chatList.size - 1)
         })
     }
 
     private fun getAllChatting() {
         chatViewModel.allChatting.observe(viewLifecycleOwner, Observer {
+           if (!it.isNullOrEmpty()){
+               id = it[it.size-1].id!!
+           }
             chatMessageAdapter.submitList(it)
             chatMessageAdapter.notifyDataSetChanged()
         })
     }
+
+    fun deleteChatItem(view: View) {
+        val itemtouchelper = object : ItemTouchHelper.SimpleCallback(
+
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val chatItem = chatMessageAdapter.currentList[position]
+                chatViewModel.deleteChattingMessage(chatItem)
+                Snackbar.make(view, "chat deleted successfully", Snackbar.LENGTH_SHORT).apply {
+                    setAction("undo") {
+                        chatViewModel.insertChattingMessage(chatItem)
+                    }
+                    show()
+                }
+            }
+
+        }
+
+        ItemTouchHelper(itemtouchelper).apply {
+            attachToRecyclerView(binding.rvChat)
+        }
+    }
+
 
 }

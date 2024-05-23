@@ -16,6 +16,9 @@ class ChatViewmodel @Inject constructor(private val repo:ChattingRepo):ViewModel
     fun insertChattingMessage(chatMassege: ChatMassege)=viewModelScope.launch(Dispatchers.IO) {
         repo.insertChattingMessage(chatMassege)
     }
+    fun updateChattingMessage(chatMassege: ChatMassege)=viewModelScope.launch(Dispatchers.IO) {
+        repo.updateChattingMessage(chatMassege)
+    }
     fun deleteChattingMessage(chatMassege: ChatMassege)=viewModelScope.launch(Dispatchers.IO) {
         repo.deleteChattingMessage(chatMassege)
     }
