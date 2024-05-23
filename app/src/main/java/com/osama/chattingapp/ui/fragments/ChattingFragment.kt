@@ -1,15 +1,13 @@
 package com.osama.chattingapp.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -22,6 +20,9 @@ import com.osama.chattingapp.viewmodels.ChatViewmodel
 import com.osama.chattingapp.websocket.WebSocketMessageListner
 import com.osama.chattingapp.websocket.WebSocketServcies
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -34,6 +35,7 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
     private val chatList= mutableListOf<ChatMassege>()
     private lateinit var chatMessageAdapter: ChatMessageAdapter
     private var id=0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,7 +52,7 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerViewChat()
-        setUpOkhttpClient()
+        //setUpOkhttpClient()
         initButton()
         getChatData()
         deleteChatItem(view)
@@ -76,9 +78,8 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
     }
 
     private fun setUpOkhttpClient(){
-        val url="ws://localhost:3000"
         val client= OkHttpClient()
-        val request= Request.Builder().url(url).build()
+        val request= Request.Builder().url(Constants.URL).build()
         val wsListner= WebSocketServcies(this)
         val ws=client.newWebSocket(request,wsListner)
 
@@ -144,6 +145,5 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
             attachToRecyclerView(binding.rvChat)
         }
     }
-
 
 }

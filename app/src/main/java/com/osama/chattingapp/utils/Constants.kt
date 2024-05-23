@@ -6,5 +6,6 @@ object Constants {
     const val KEy_SenderId="SenderId"
     const val KEy_ReceiverId="ReceiverId"
     const val Chat_Db="ChatDatabase"
+    const val URL="ws://localhost:3000"
 
 }

@@ -5,9 +5,7 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 
-interface WebSocketMessageListner{
- fun onMessageReceived(message:String)
-}
+
 open class WebSocketServcies (val webSocketMessageListner: WebSocketMessageListner): WebSocketListener() {
 
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
