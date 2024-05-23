@@ -14,11 +14,13 @@ open class WebSocketServcies (val webSocketMessageListner: WebSocketMessageListn
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-        super.onClosing(webSocket, code, reason)
+     //   super.onClosing(webSocket, code, reason)
+        printResponse(reason)
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-        super.onFailure(webSocket, t, response)
+       // super.onFailure(webSocket, t, response)
+       printResponse("Failure${response?.message}")
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {

@@ -10,14 +10,14 @@ import com.osama.chattingapp.databinding.ItemContainerRecivedMesageBinding
 import com.osama.chattingapp.databinding.ItemContainerSentMessageBinding
 import com.osama.chattingapp.data.local.ChatMassege
 import com.osama.chattingapp.utils.Constants
-import com.osama.chattingapp.utils.Constants.viewTypeReceived
-import com.osama.chattingapp.utils.Constants.viewTypeSent
+import com.osama.chattingapp.utils.Constants.ViewTypeReceived
+import com.osama.chattingapp.utils.Constants.ViewTypeSent
 
 class ChatMessageAdapter():ListAdapter<ChatMassege,RecyclerView.ViewHolder>(DiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-         return if (viewType==viewTypeSent){
+         return if (viewType==ViewTypeSent){
             val view= ItemContainerSentMessageBinding.inflate(LayoutInflater.from(parent.context),parent,false)
             ViewHolderSent(view)
         }else{
@@ -28,14 +28,18 @@ class ChatMessageAdapter():ListAdapter<ChatMassege,RecyclerView.ViewHolder>(Diff
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val chat=getItem(position)
 
-        if (getItemViewType(position)==viewTypeSent){
+        if (getItemViewType(position)==ViewTypeSent){
             (holder as ViewHolderSent).binding.apply {
-                textmessage.text=chat.message
+                holder.binding.apply {
+                    model=chat
+                }
             }
 
         }else{
             (holder as ViewHolderReceived).binding.apply {
-                textmessage.text=chat.message
+                holder.binding.apply {
+                    model=chat
+                }
             }
         }
     }
@@ -43,9 +47,9 @@ class ChatMessageAdapter():ListAdapter<ChatMassege,RecyclerView.ViewHolder>(Diff
     override fun getItemViewType(position: Int): Int {
         val chat=getItem(position)
         return if (chat.senderId == Constants.KEy_SenderId){
-            viewTypeSent
+            ViewTypeSent
         }else{
-            viewTypeReceived
+            ViewTypeReceived
         }
     }
 
@@ -62,7 +66,7 @@ class ChatMessageAdapter():ListAdapter<ChatMassege,RecyclerView.ViewHolder>(Diff
 
     private class DiffCallback : DiffUtil.ItemCallback<ChatMassege>() {
         override fun areItemsTheSame(oldItem: ChatMassege, newItem: ChatMassege): Boolean {
-            return oldItem==newItem
+            return oldItem.id==newItem.id
         }
 
         override fun areContentsTheSame(oldItem: ChatMassege, newItem: ChatMassege): Boolean {

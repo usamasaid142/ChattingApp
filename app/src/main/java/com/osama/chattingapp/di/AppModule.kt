@@ -1,4 +1,4 @@
-package com.osama.chattingapp.dependancyinjection
+package com.osama.chattingapp.di
 
 
 import android.content.Context
