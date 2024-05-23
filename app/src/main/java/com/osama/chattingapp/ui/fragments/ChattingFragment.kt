@@ -22,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
@@ -92,6 +93,7 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
        runBlocking {
            val jsonObject=JSONObject(message)
            jsonObject.put("message",message)
+           android.util.Log.e("TAG", "onMessageReceived: ${jsonObject.toString()}")
            val chatMassege=ChatMassege(id,senderId = "", receiverId = Constants.KEy_ReceiverId, jsonObject.toString())
            chatViewModel.insertChattingMessage(chatMassege)
            viewModel.setChatMessage(chatMassege)

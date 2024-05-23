@@ -2,8 +2,9 @@ package com.osama.chattingapp.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
+import kotlinx.serialization.Serializable
 @Entity(tableName = "chat_table")
+@Serializable
 data class ChatMassege(
     @PrimaryKey(autoGenerate = true)
     val id:Int?,
