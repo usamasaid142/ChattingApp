@@ -6,7 +6,4 @@ object Constants {
     const val KEy_SenderId="SenderId"
     const val KEy_ReceiverId="ReceiverId"
     const val Chat_Db="ChatDatabase"
-    const val URL="ws://192.168.1.118:3000"
-
-
 }

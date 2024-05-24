@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.osama.chattingapp.BuildConfig
 import com.osama.chattingapp.ui.adapter.ChatMessageAdapter
 import com.osama.chattingapp.data.local.ChatMassege
 import com.osama.chattingapp.databinding.ChattingfragmentBinding
@@ -84,7 +85,7 @@ class ChattingFragment : Fragment(), WebSocketMessageListner {
 
     private fun setUpOkhttpClient(){
         val client= OkHttpClient()
-        val request= Request.Builder().url(Constants.URL).build()
+        val request= Request.Builder().url(BuildConfig.CHat_BASE_URL).build()
         val wsListner= WebSocketServcies(this)
          ws=client.newWebSocket(request,wsListner)
 
